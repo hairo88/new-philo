@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:52:29 by apple             #+#    #+#             */
-/*   Updated: 2024/03/05 20:23:50 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/06 18:50:08 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ t_program *init_program(int ac, char *av[], int *error_flag)
 		*error_flag = ERROR;
 	if (pthread_mutex_init(&info_data->meal_lock, NULL) != 0)
 		*error_flag = ERROR;
+	if (pthread_mutex_init(&info_data->last_meal_lock, NULL) != 0)
+		*error_flag = ERROR;
 	if (pthread_mutex_init(&info_data->write_lock, NULL) != 0)
 		*error_flag = ERROR;
 	info_data->forks = malloc(sizeof(pthread_mutex_t) * info_data->num_of_philos);
@@ -104,6 +106,8 @@ int init_philo(t_program *info)
 		philo[i].dead = &info->dead_flag;
 		philo[i].info = info;
 		philo[i].last_meal = info->start_time;
+		philo[i].dead_lock = &info->dead_lock;
+		philo[i].meal_lock = &info->meal_lock;
 		philo[i].r_fork = &info->forks[i];
 		philo[i].l_fork = &info->forks[(i + 1) % info->num_of_philos];
 		if (philo[i].r_fork == NULL || philo[i].l_fork == NULL)

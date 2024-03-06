@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:53:40 by apple             #+#    #+#             */
-/*   Updated: 2024/03/05 20:25:14 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/06 17:13:29 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int ft_philo_atoi(const char* str, int *flag)
 
 size_t get_time(void)
 {
-	struct timeval  time;
-	size_t          time_in_ms;
+	struct timeval	time;
+	size_t			time_in_ms;
 
 	if (gettimeofday(&time, NULL) == -1)
 	{
@@ -61,16 +61,17 @@ int	print_log(t_philo *philo, int log_type)
 
 	time = get_time() - philo->info->start_time;
 	pthread_mutex_lock(&philo->info->write_lock);
+	// printf("%zu log type = [%d]\n", time, log_type);
 	if (log_type == EATING)
-		printf("%zu [%d] is eating\n", time, philo->id);
+		printf("%zu %d is eating\n", time, philo->id);
 	else if (log_type == SLEEPING)
-		printf("%zu [%d] is sleeping\n", time, philo->id);
+		printf("%zu %d is sleeping\n", time, philo->id);
 	else if (log_type == THINKING)
-		printf("%zu [%d] is thinking\n", time, philo->id);
+		printf("%zu %d is thinking\n", time, philo->id);
 	else if (log_type == DEAD)
-		printf("%zu [%d] is dead\n", time, philo->id);
+		printf("%zu %d died\n", time, philo->id);
 	else if (log_type == FORK)
-		printf("%zu [%d] has taken a fork\n", time, philo->id);
+		printf("%zu %d has taken a fork\n", time, philo->id);
 	pthread_mutex_unlock(&philo->info->write_lock);
 	return (NO_ERROR);
 }

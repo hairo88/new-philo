@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:16:15 by apple             #+#    #+#             */
-/*   Updated: 2024/03/01 00:45:40 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/06 15:58:56 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ int main(int ac, char *av[])
 		printf("Error: failed to initialize philosophers\n");
 		return (ERROR);
 	}
-	printf("error_flag: %d\n", error_flag);
+	// printf("error_flag: %d\n", error_flag);
 	if (init_philo(info_data) == NO)
 	{
 		printf("Error: failed to initialize philosophers\n");
 		return (ERROR);
 	}
-	if (start_simulation(info_data))
+	if (start_simulation(info_data) == NO)
 	{
 		printf("Error: failed to start simulation\n");
 		return (1);

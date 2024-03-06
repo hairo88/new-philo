@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 23:07:37 by apple             #+#    #+#             */
-/*   Updated: 2024/03/05 20:26:49 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/06 18:50:00 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 # define NO 1
 
 # define ALIVE 0
-# define DEAD 1
+# define DEAD 4
 
-# define NO_ERROR 1
+# define NO_ERROR 0
 # define INVALID_ARG -1
 # define ERROR -1
 
@@ -70,6 +70,7 @@ typedef struct s_program
 	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	write_lock;
+	pthread_mutex_t	last_meal_lock;
 	pthread_mutex_t	*forks;
 	t_philo			*philo;
 }	t_program;
@@ -79,7 +80,9 @@ int 		ft_philo_atoi(const char* str, int *flag);
 size_t		get_time(void);
 void		drop_forks(t_philo *philo);
 int			ft_usleep(size_t time_in_ms);
-int	print_log(t_philo *philo, int log_type);
+int			print_log(t_philo *philo, int log_type);
+int			check_philo(t_philo	*philo);
+void		update_last_meal(t_philo *philo);
 
 // philo_init.c
 t_program	*init_program(int ac, char *av[], int *error_flag);
@@ -90,6 +93,7 @@ void		philo_output(t_philo *philo);
 // philo.c
 int			start_simulation(t_program *info);
 void		*monitor_routine(void *arg);
-int try_get_forks(t_philo *philo);
+int			try_get_forks(t_philo *philo);
+
 
 #endif
