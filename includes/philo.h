@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 23:07:37 by apple             #+#    #+#             */
-/*   Updated: 2024/03/06 18:50:00 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/07 10:49:04 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int			check_philo(t_philo	*philo);
 void		update_last_meal(t_philo *philo);
 
 // philo_init.c
-t_program	*init_program(int ac, char *av[], int *error_flag);
+t_program	*init_program(int ac, char *av[]);
 int			init_philo(t_program *info);
 void		program_output(t_program *info);
 void		philo_output(t_philo *philo);
@@ -95,5 +95,7 @@ int			start_simulation(t_program *info);
 void		*monitor_routine(void *arg);
 int			try_get_forks(t_philo *philo);
 
+// all_free.c
+void	free_all(t_program *info, t_philo *philo);
 
 #endif

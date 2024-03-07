@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utlis2.c                                     :+:      :+:    :+:   */
+/*   all_free.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/06 16:33:49 by apple             #+#    #+#             */
-/*   Updated: 2024/03/07 11:06:11 by apple            ###   ########.fr       */
+/*   Created: 2024/03/06 19:15:58 by apple             #+#    #+#             */
+/*   Updated: 2024/03/07 10:45:15 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_philo(t_philo	*philo)
+void	free_all(t_program *info, t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->dead_lock);
-	if (philo->info->dead_flag == DEAD)
-	{
-		pthread_mutex_unlock(&philo->info->dead_lock);
-		return (DEAD);
-	}
-	pthread_mutex_unlock(&philo->info->dead_lock);
-	return (ALIVE);
-}
+	size_t	i;
 
-void	update_last_meal(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->info->last_meal_lock);
-	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->info->last_meal_lock);
+	i = 0;
+	while ((int)i < info->num_of_philos)
+	{
+		pthread_mutex_destroy(philo[i].l_fork);
+		pthread_mutex_destroy(philo[i].r_fork);
+		i++;
+	}
+	pthread_mutex_destroy(&info->dead_lock);
+	pthread_mutex_destroy(&info->last_meal_lock);
+	free(philo);
+	free(info);
 }

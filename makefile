@@ -52,7 +52,8 @@ SRC = src/main.c \
 	  src/philo_init.c \
 	  src/philo_utlis.c \
 	  src/philo_utlis2.c \
-	  src/philo.c
+	  src/philo.c \
+	  src/all_free.c
 OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(SRC:.c=.o)))
 
