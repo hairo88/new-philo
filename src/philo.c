@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:22:33 by apple             #+#    #+#             */
-/*   Updated: 2024/03/06 19:12:51 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/11 18:36:29 by kotainou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void*	philo_routine(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
 	while (1)
@@ -26,32 +26,42 @@ void*	philo_routine(void *arg)
 		{
 			print_log(philo, EATING);
 			ft_usleep(philo->info->time_to_eat);
-			// philo->last_meal = get_time();
 			update_last_meal(philo);
 			philo->meals_eaten++;
 			drop_forks(philo);
-			if (philo->info->num_times_to_eat != -1 && philo->meals_eaten == philo->info->num_times_to_eat)
-				break ;
+			// if (check_philo(philo) == DEAD)
+			// 	return (NULL);
+			print_log(philo, SLEEPING);
+			ft_usleep(philo->info->time_to_sleep);
+			if (philo->meals_eaten == philo->info->num_times_to_eat)
+				return (NULL);
 		}
 		else
-		{
-			print_log(philo, DEAD);
 			return (NULL);
-		}
 		if (check_philo(philo) == DEAD)
 			return (NULL);
-		print_log(philo, SLEEPING);
-		ft_usleep(philo->info->time_to_sleep);
 	}
 	return (NULL);
 }
 
+void	philo_one(t_philo *philo)
+{
+	print_log(philo, FORK);
+	ft_usleep(philo->info->time_to_die);
+}
+
 int try_get_forks(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->dead_lock);
+	pthread_mutex_lock(philo->dead_lock);
 	if (philo->info->dead_flag == DEAD)
 	{
 		pthread_mutex_unlock(philo->dead_lock);
+		return (ERROR);
+	}
+	if (philo->info->num_of_philos == 1)
+	{
+		pthread_mutex_unlock(philo->dead_lock);
+		philo_one(philo);
 		return (ERROR);
 	}
 	pthread_mutex_lock(philo->r_fork);
@@ -92,51 +102,10 @@ int start_simulation(t_program *info)
 	return (NO_ERROR);
 }
 
-// void	*monitor_routine(void *arg)
-// {
-// 	t_program	*info;
-// 	size_t		i;
-
-// 	i = 0;
-// 	info = (t_program *)arg;
-// 	while (1)
-// 	{
-// 		i = 0;
-// 		while ((int)i < info->num_of_philos)
-// 		{
-// 			pthread_mutex_lock(&info->dead_lock);
-// 			if (info->dead_flag == DEAD)
-// 			{
-// 				pthread_mutex_unlock(&info->dead_lock);
-// 				return (NULL);
-// 			}
-// 			pthread_mutex_lock(&info->philo[i].info->last_meal_lock);
-// 			if (get_time() - info->philo[i].last_meal > info->time_to_die)
-// 			{
-// 				pthread_mutex_lock(&info->dead_lock);
-// 				if (info->dead_flag == ALIVE)
-// 				{
-// 					print_log(&info->philo[i], DEAD);
-// 					info->dead_flag = DEAD;
-// 				}
-// 				print_log(&info->philo[i], DEAD);
-// 				info->dead_flag = DEAD;
-// 				pthread_mutex_unlock(&info->dead_lock);
-// 				pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
-// 				return (NULL);
-// 			}
-// 			pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
-// 			i++;
-// 		}
-// 		usleep(100);
-// 	}
-// 	return (NULL);
-// }
-
 void    *monitor_routine(void *arg)
 {
-	t_program    *info;
-	size_t        i;
+	t_program	*info;
+	size_t		i;
 
 	info = (t_program *)arg;
 	while (1)
@@ -160,7 +129,7 @@ void    *monitor_routine(void *arg)
 			pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
 			i++;
 		}
-		usleep(100);
+		usleep(200);
 	}
 	return (NULL);
 }

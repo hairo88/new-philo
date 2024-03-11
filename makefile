@@ -37,11 +37,11 @@
 # .PHONY: all clean fclean re
 
 NAME = philo
-CC = gcc
+CC = cc
 INCLUDES_DIR = ./includes
 INC = -I $(INCLUDES_DIR)
 CFLAGS = -Wall -Wextra -Werror $(INC)
-CFLAGS += -g -fsanitize=thread
+# CFLAGS += -g -fsanitize=thread
 
 ifeq ($(CC),gcc)
 	CFLAGS += -g -fsanitize=thread

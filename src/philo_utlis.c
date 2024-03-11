@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utlis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:53:40 by apple             #+#    #+#             */
-/*   Updated: 2024/03/06 17:13:29 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/11 18:31:30 by kotainou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,21 @@ size_t get_time(void)
 	return (time_in_ms);
 }
 
+void	philo_dead(t_philo *philo)
+{
+	size_t	time;
+
+	time = get_time() - philo->info->start_time;
+	if (philo->meals_eaten != philo->info->num_times_to_eat)
+		printf("%zu %d died\n", time, philo->id);
+}
+
 int	print_log(t_philo *philo, int log_type)
 {
 	size_t	time;
 
 	time = get_time() - philo->info->start_time;
 	pthread_mutex_lock(&philo->info->write_lock);
-	// printf("%zu log type = [%d]\n", time, log_type);
 	if (log_type == EATING)
 		printf("%zu %d is eating\n", time, philo->id);
 	else if (log_type == SLEEPING)
@@ -69,7 +77,7 @@ int	print_log(t_philo *philo, int log_type)
 	else if (log_type == THINKING)
 		printf("%zu %d is thinking\n", time, philo->id);
 	else if (log_type == DEAD)
-		printf("%zu %d died\n", time, philo->id);
+		philo_dead(philo);
 	else if (log_type == FORK)
 		printf("%zu %d has taken a fork\n", time, philo->id);
 	pthread_mutex_unlock(&philo->info->write_lock);

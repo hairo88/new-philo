@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
+/*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:16:15 by apple             #+#    #+#             */
-/*   Updated: 2024/03/07 10:58:03 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/07 13:02:56 by kotainou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int main(int ac, char *av[])
 	if (start_simulation(info_data) == NO)
 	{
 		printf("Error: failed to start simulation\n");
-		return (1);
+		return (ERROR);
 	}
 	free_all(info_data, info_data->philo);
 	return (0);
