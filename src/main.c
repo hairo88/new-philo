@@ -6,7 +6,7 @@
 /*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:16:15 by apple             #+#    #+#             */
-/*   Updated: 2024/03/07 13:02:56 by kotainou         ###   ########.fr       */
+/*   Updated: 2024/03/11 18:44:18 by kotainou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int main(int ac, char *av[])
 	}
 	free_all(info_data, info_data->philo);
 	return (0);
+}
+
+__attribute__((destructor))
+static void destructor() {
+    system("leaks -q philo");
 }
 
 // 5 800 800 200 

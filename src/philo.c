@@ -6,7 +6,7 @@
 /*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:22:33 by apple             #+#    #+#             */
-/*   Updated: 2024/03/11 18:36:29 by kotainou         ###   ########.fr       */
+/*   Updated: 2024/03/11 18:41:55 by kotainou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void    *monitor_routine(void *arg)
 			pthread_mutex_lock(&info->philo[i].info->last_meal_lock);
 			if (get_time() - info->philo[i].last_meal > info->time_to_die)
 			{
+				printf("monitor thread\n");
 				pthread_mutex_lock(&info->dead_lock);
 				if (info->dead_flag == ALIVE)
 				{
