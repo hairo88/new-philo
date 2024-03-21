@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:22:33 by apple             #+#    #+#             */
-/*   Updated: 2024/03/11 18:41:55 by kotainou         ###   ########.fr       */
+/*   Updated: 2024/03/11 21:09:54 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void*	philo_routine(void *arg)
 			update_last_meal(philo);
 			philo->meals_eaten++;
 			drop_forks(philo);
-			// if (check_philo(philo) == DEAD)
-			// 	return (NULL);
+			if (check_philo(philo) == DEAD)
+				return (NULL);
 			print_log(philo, SLEEPING);
 			ft_usleep(philo->info->time_to_sleep);
 			if (philo->meals_eaten == philo->info->num_times_to_eat)
@@ -116,15 +116,15 @@ void    *monitor_routine(void *arg)
 			pthread_mutex_lock(&info->philo[i].info->last_meal_lock);
 			if (get_time() - info->philo[i].last_meal > info->time_to_die)
 			{
-				printf("monitor thread\n");
+				pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
 				pthread_mutex_lock(&info->dead_lock);
 				if (info->dead_flag == ALIVE)
 				{
+					pthread_mutex_unlock(&info->dead_lock);
 					print_log(&info->philo[i], DEAD);
 					info->dead_flag = DEAD;
 				}
 				pthread_mutex_unlock(&info->dead_lock);
-				pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
 				return (NULL);
 			}
 			pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
@@ -134,3 +134,43 @@ void    *monitor_routine(void *arg)
 	}
 	return (NULL);
 }
+
+//  void    *monitor_routine(void *arg)
+// {
+// 	t_program	*info;
+// 	size_t		i;
+
+// 	info = (t_program *)arg;
+// 	while (1)
+// 	{
+// 		i = 0;
+// 		while ((int)i < info->num_of_philos)
+// 		{
+// 			pthread_mutex_lock(&info->dead_lock);
+// 			if (info->dead_flag == DEAD)
+// 			{
+// 				pthread_mutex_unlock(&info->dead_lock);
+// 				return (NULL);
+// 			}
+// 			pthread_mutex_unlock(&info->dead_lock);
+
+// 			pthread_mutex_lock(&info->philo[i].info->last_meal_lock);
+// 			if (get_time() - info->philo[i].last_meal > info->time_to_die)
+// 			{
+// 				pthread_mutex_lock(&info->dead_lock);
+// 				if (info->dead_flag == ALIVE)
+// 				{
+// 					print_log(&info->philo[i], DEAD);
+// 					info->dead_flag = DEAD;
+// 				}
+// 				pthread_mutex_unlock(&info->dead_lock);
+// 				pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
+// 				return (NULL);
+// 			}
+// 			pthread_mutex_unlock(&info->philo[i].info->last_meal_lock);
+// 			i++;
+// 		}
+// 		usleep(200);
+// 	}
+// 	return (NULL);
+// }
