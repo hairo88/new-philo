@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 00:22:33 by apple             #+#    #+#             */
-/*   Updated: 2024/03/11 21:09:54 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/21 14:49:27 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,21 @@ void*	philo_routine(void *arg)
 			print_log(philo, EATING);
 			ft_usleep(philo->info->time_to_eat);
 			update_last_meal(philo);
+			pthread_mutex_lock(&philo->meal_lock);
 			philo->meals_eaten++;
+			pthread_mutex_unlock(&philo->meal_lock);
 			drop_forks(philo);
 			if (check_philo(philo) == DEAD)
 				return (NULL);
 			print_log(philo, SLEEPING);
 			ft_usleep(philo->info->time_to_sleep);
+			pthread_mutex_lock(&philo->meal_lock);
 			if (philo->meals_eaten == philo->info->num_times_to_eat)
+			{
+				pthread_mutex_unlock(&philo->meal_lock);
 				return (NULL);
+			}
+			pthread_mutex_unlock(&philo->meal_lock);
 		}
 		else
 			return (NULL);
@@ -122,7 +129,9 @@ void    *monitor_routine(void *arg)
 				{
 					pthread_mutex_unlock(&info->dead_lock);
 					print_log(&info->philo[i], DEAD);
+					pthread_mutex_lock(&info->dead_lock);
 					info->dead_flag = DEAD;
+					pthread_mutex_unlock(&info->dead_lock);
 				}
 				pthread_mutex_unlock(&info->dead_lock);
 				return (NULL);

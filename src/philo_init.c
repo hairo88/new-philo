@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:52:29 by apple             #+#    #+#             */
-/*   Updated: 2024/03/07 11:06:57 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/21 14:34:14 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ t_program *init_program(int ac, char *av[])
 	if (error_flag == INVALID_ARG)
 		return (NULL);
 	info_data->dead_flag = ALIVE;
+	// if (pthread_mutex_init(&info_data->meal_lock, NULL) != 0)
+	// 	return (NULL);
 	if (pthread_mutex_init(&info_data->dead_lock, NULL) != 0)
 		return (NULL);
 	if (pthread_mutex_init(&info_data->last_meal_lock, NULL) != 0)
@@ -106,6 +108,8 @@ int init_philo(t_program *info)
 		philo[i].r_fork = &info->forks[i];
 		philo[i].l_fork = &info->forks[(i + 1) % info->num_of_philos];
 		if (philo[i].r_fork == NULL || philo[i].l_fork == NULL)
+			return (NO);
+		if (pthread_mutex_init(&philo[i].meal_lock, NULL) != 0)
 			return (NO);
 		i++;
 	}

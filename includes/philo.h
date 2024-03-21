@@ -6,7 +6,7 @@
 /*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 23:07:37 by apple             #+#    #+#             */
-/*   Updated: 2024/03/07 10:49:04 by apple            ###   ########.fr       */
+/*   Updated: 2024/03/21 14:33:16 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_philo
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*dead_lock;
-	pthread_mutex_t	*meal_lock;
+	pthread_mutex_t	meal_lock;
 	t_program		*info;
 }			t_philo;
 

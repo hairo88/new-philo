@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utlis.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kotainou <kotainou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apple <apple@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 19:53:40 by apple             #+#    #+#             */
-/*   Updated: 2024/03/11 18:31:30 by kotainou         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:38:13 by apple            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,26 @@ void	philo_dead(t_philo *philo)
 	size_t	time;
 
 	time = get_time() - philo->info->start_time;
+	pthread_mutex_lock(&philo->meal_lock);
 	if (philo->meals_eaten != philo->info->num_times_to_eat)
+	{
+		pthread_mutex_unlock(&philo->meal_lock);
 		printf("%zu %d died\n", time, philo->id);
+	}
+	pthread_mutex_unlock(&philo->meal_lock);
 }
 
 int	print_log(t_philo *philo, int log_type)
 {
 	size_t	time;
 
+	// pthread_mutex_lock(philo->dead_lock);
+	// if (philo->info->dead_flag == DEAD)
+	// {
+	// 	pthread_mutex_unlock(philo->dead_lock);
+	// 	return (ERROR);
+	// }
+	// pthread_mutex_unlock(philo->dead_lock);
 	time = get_time() - philo->info->start_time;
 	pthread_mutex_lock(&philo->info->write_lock);
 	if (log_type == EATING)
